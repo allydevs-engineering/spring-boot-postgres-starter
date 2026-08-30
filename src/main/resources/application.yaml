@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: spring-boot-postgres-starter
+
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/ad_sb_pg_starter}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:password}
+
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.yaml
+    enabled: false
+
+server:
+  shutdown: graceful
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
