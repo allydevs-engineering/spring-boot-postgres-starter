@@ -1,0 +1,36 @@
+name: CI
+
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
+permissions:
+    contents: read
+
+jobs:
+    build:
+        name: Build and Test
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v6
+
+            - name: Set up Java
+              uses: actions/setup-java@v6
+              with:
+                  distribution: temurin
+                  java-version: '21'
+                  cache: maven
+
+            - name: Make Maven wrapper executable
+              run: chmod +x mvnw
+
+            - name: Verify formatting
+              run: ./mvnw spotless:check
+
+            - name: Build and test
+              run: ./mvnw verify
