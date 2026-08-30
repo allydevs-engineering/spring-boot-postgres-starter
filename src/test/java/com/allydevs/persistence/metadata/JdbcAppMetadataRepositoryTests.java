@@ -2,17 +2,18 @@ package com.allydevs.persistence.metadata;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.allydevs.persistence.TestcontainersConfiguration;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 
 @SpringBootTest
+@Import(TestcontainersConfiguration.class)
 class JdbcAppMetadataRepositoryTests {
 
   @Autowired private JdbcTemplate jdbcTemplate;
@@ -28,20 +29,20 @@ class JdbcAppMetadataRepositoryTests {
   void findsPersistedMetadata() {
     OffsetDateTime createdAt = OffsetDateTime.now();
 
-    KeyHolder keyHolder = new GeneratedKeyHolder();
+    var keyHolder = new org.springframework.jdbc.support.GeneratedKeyHolder();
 
     jdbcTemplate.update(
         connection -> {
           var statement =
               connection.prepareStatement(
                   """
-                    INSERT INTO app_metadata (
-                        application_name,
-                        application_version,
-                        created_at
-                    )
-                    VALUES (?, ?, ?)
-                    """,
+                        INSERT INTO app_metadata (
+                            application_name,
+                            application_version,
+                            created_at
+                        )
+                        VALUES (?, ?, ?)
+                        """,
                   new String[] {"id"});
 
           statement.setString(1, "spring-boot-postgres-starter");
