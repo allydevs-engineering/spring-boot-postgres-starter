@@ -30,7 +30,10 @@ jobs:
               run: chmod +x mvnw
 
             - name: Verify formatting
-              run: ./mvnw spotless:check
+              run: ./mvnw --batch-mode spotless:check
 
-            - name: Build and test
-              run: ./mvnw verify
+            - name: Run tests
+              run: ./mvnw --batch-mode test
+
+            - name: Verify build
+              run: ./mvnw --batch-mode verify
